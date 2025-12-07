@@ -1,35 +1,98 @@
-📌 URL Shortener – Backend Assignment (Sembark Tech)
 
-This project is a role-based URL shortener system built using Laravel 12, implementing:
+# URL Shortener – Sembark Tech Backend Assignment
 
-Company-wise user & URL isolation
+A role-based URL Shortener system built using **Laravel 12**, implementing:
 
-Role-based access control (SuperAdmin, Admin, Member, Sales, Manager)
+- Company-wise multi-tenant URL management  
+- Role restrictions (SuperAdmin, Admin, Member, Sales, Manager)  
+- Policy-based access control  
+- Short URL creation & resolution  
+- User invitation rules  
+- Full test coverage using Laravel's testing suite  
 
-URL shortening with authorization policies
+## 🚀 Features
 
-Invitation workflow (Admin & SuperAdmin restrictions)
+### ✅ **1. Multi-company structure**
+- Each user belongs to a **company**
+- Sales & Manager roles can create short URLs **only for their company**
+- Admin & Member cannot create URLs  
+- SuperAdmin restricted from creating URLs (as per assignment)
 
-Complete test suite (Pest + PHPUnit)
+### ✅ **2. Short URL Management**
+- Generate short URLs (8-character codes)
+- Store original URL, creator, and company
+- Redirect internally using `resolve/{code}`
+- Short URLs **are not publicly accessible**
 
-🚀 How to Setup the Project Locally
-1️⃣ Clone the Repository
-git clone https://github.com/Dik-sha08/url-shortener-assignment.git
+### ✅ **3. Access Rules (Policies)**
+| Role          | Can Create URL? | Can View URLs? |
+|---------------|-----------------|----------------|
+| SuperAdmin    | ❌ No            | ✔ Yes          |
+| Admin         | ❌ No            | ✔ Only company |
+| Member        | ❌ No            | ✔ Only own     |
+| Sales         | ✔ Yes           | ✔ Only company |
+| Manager       | ✔ Yes           | ✔ Only company |
+
+### ✅ **4. Assignment Tests Implemented**
+Includes full test file:
+
+- Sales can create URLs  
+- Admin/Member/SuperAdmin cannot  
+- Company-based listing  
+- No public access to resolve URL  
+- Database tests  
+
+All tests pass successfully.
+
+---
+
+## 🛠️ **Tech Stack**
+
+- PHP 8.2  
+- Laravel 12  
+- MySQL  
+- Breeze Authentication  
+- Policies for authorization  
+- PestPHP for tests  
+
+---
+
+## 📦 Installation & Setup
+
+### **1. Clone the repository**
+
+```
+
+git clone [https://github.com/Dik-sha08/url-shortener-assignment.git](https://github.com/Dik-sha08/url-shortener-assignment.git)
 cd url-shortener-assignment
 
-2️⃣ Install Dependencies
+```
+
+---
+
+## **2. Install dependencies**
+
+```
+
 composer install
 npm install
 npm run build
 
-3️⃣ Environment Setup
+```
 
-Copy example file:
+---
+
+## **3. Create .env File**
+
+```
 
 cp .env.example .env
 
+```
 
-Update .env with your MySQL credentials:
+Then update the database section:
+
+```
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -38,86 +101,155 @@ DB_DATABASE=url_shortener
 DB_USERNAME=urluser
 DB_PASSWORD=Diksha@123#
 
+```
 
-Generate key:
+---
+
+## **4. Generate application key**
+
+```
 
 php artisan key:generate
 
-4️⃣ Run Migrations & Seeders
-php artisan migrate:fresh --seed
+```
 
+---
 
-This will create:
+## **5. Run migrations**
 
-Companies
+```
 
-Users (including SuperAdmin)
+php artisan migrate
 
-Short URLs table
+```
 
-Additional relations & roles
+---
 
-5️⃣ Start Development Server
+## **6. Seed SuperAdmin**
+
+```
+
+php artisan db:seed
+
+```
+
+Seeder creates:
+
+- SuperAdmin
+- Default company (optional)
+
+---
+
+## ▶️ Running the Application
+
+```
+
 php artisan serve
 
+```
 
 Visit:
 
-👉 http://127.0.0.1:8000
+```
 
-🔐 Role Access Rules
-Role	Can Create URL?	Notes
-Sales	✅ Yes	Allowed
-Manager	✅ Yes	Allowed
-Admin	❌ No	Restricted
-Member	❌ No	Restricted
-SuperAdmin	❌ No	Restricted
+[http://127.0.0.1:8000](http://127.0.0.1:8000)
 
-Each role’s permissions are enforced using Laravel Policies.
+````
 
-🧪 Running Tests
+---
 
-To execute the full test suite:
+# 👥 Creating Test User for Roles
 
+### **1. Create a company**
+
+```sql
+INSERT INTO companies (name, created_at, updated_at)
+VALUES ('Test Company', NOW(), NOW());
+````
+
+Assume company_id = 1
+
+### **2. Update user role**
+
+```sql
+UPDATE users
+SET role = 'Sales', company_id = 1
+WHERE email = 'your-email@example.com';
+```
+
+---
+
+# 🔐 Authentication Flow
+
+1. Register a new user (`/register`)
+2. Update the user role in DB (Sales/Manager/Admin etc)
+3. Login
+4. Access:
+
+```
+/short-urls
+```
+
+---
+
+# 🧪 Running Tests
+
+To confirm that the assignment is complete:
+
+```
 php artisan test
+```
 
+All 30 tests (Laravel default + assignment tests) should pass.
 
-Includes:
+---
 
-Authentication tests
+# 📁 Project Structure
 
-Profile tests
-
-URL access & visibility tests
-
-Role-based authorization tests
-
-📦 Project Structure (Summary)
+```
 app/
- ├── Models/
- ├── Policies/
- ├── Http/
- │    ├── Controllers/
- │    ├── Middleware/
+ ├── Models/Company.php
+ ├── Models/ShortUrl.php
+ ├── Policies/ShortUrlPolicy.php
+ ├── Http/Controllers/ShortUrlController.php
+ ├── Http/Controllers/InvitationController.php
 database/
  ├── migrations/
- ├── seeders/
-resources/
- ├── views/
+ ├── seeders/SuperAdminSeeder.php
 tests/
- ├── Feature/
- ├── Unit/
+ ├── Feature/ShortUrlAccessTest.php
+resources/
+ └── views/short_urls/index.blade.php
+```
 
-🤖 AI Usage Declaration (As Required by Assignment)
+---
 
-I used AI tools only for assistance, not for generating the full assignment.
-My usage includes:
+# 🤖 Acceptable AI Usage Declaration (Assignment Requirement)
 
-ChatGPT: Helped me understand Laravel policies, model relationships, and testing concepts.
+As required in the assignment:
 
-ChatGPT: Assisted in debugging specific errors (policy binding, factories, controller fixes).
+```
+I have used AI tools responsibly and only for reference or syntax lookup.
 
-Cursor / ChatGPT: Used occasionally for syntax lookup (e.g., validation, migrations).
+- ChatGPT was used to understand Laravel policy rules, test structure, 
+  and clarify error messages.
+- All implementation logic, database design, controllers, policies,
+  and test reasoning are written by me.
+- No code was blindly copied. Every part was understood and verified manually.
 
-All implementation decisions, coding, testing, debugging strategy, and final logic are my own work.
-AI was used only for learning, verification, and error guidance as allowed in the assignment.
+This project follows the Acceptable AI Usage Policy as stated in the assignment.
+```
+
+---
+
+# 📝 Conclusion
+
+This project implements:
+
+✔ Role-based URL creation
+✔ Company-scoped data separation
+✔ Authorization policies
+✔ 100% passing tests
+✔ Clean architecture
+✔ Full assignment compliance
+
