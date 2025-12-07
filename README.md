@@ -1,59 +1,210 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# **URL Shortener – Backend Assignment**
 
-## About Laravel
+This project is a role-based URL Shortener system built using **Laravel 12**, **MySQL**, **Policies**, **Migrations**, **Seeders**, and **Feature Tests**.
+The application supports:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+* Company-wise user management
+* Role-based access control (SuperAdmin, Admin, Member, Sales, Manager)
+* Short URL creation restrictions based on user role
+* Private URL resolution (no public redirects)
+* User invitation logic (rules included in controllers)
+* Full automated tests for all requirements
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## **🔧 Tech Stack Used**
 
-## Learning Laravel
+* **Laravel 12.x**
+* **PHP 8.2+**
+* **Composer**
+* **MySQL**
+* **Laravel Breeze (Auth UI)**
+* **PHPUnit (Feature Tests)**
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# **🚀 How to Set Up Project Locally**
 
-## Laravel Sponsors
+Follow these steps to run the project on your system.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## **1️⃣ Clone the Repository**
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+git clone https://github.com/Dik-sha08/url-shortener-assignment.git
+```
 
-## Contributing
+Go inside project folder:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+cd url-shortener-assignment
+```
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## **2️⃣ Install Dependencies**
 
-## Security Vulnerabilities
+Make sure Composer is installed.
+Then run:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+composer install
+```
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## **3️⃣ Create Environment File**
+
+Duplicate the example env:
+
+```bash
+cp .env.example .env
+```
+
+Generate app key:
+
+```bash
+php artisan key:generate
+```
+
+---
+
+## **4️⃣ Configure Database (MySQL)**
+
+Open `.env` and update these values:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=url_shortener
+DB_USERNAME=urluser
+DB_PASSWORD=Diksha@123#
+```
+
+Ensure the database and user exist.
+(Already created during assignment.)
+
+---
+
+## **5️⃣ Run Migrations**
+
+```bash
+php artisan migrate
+```
+
+If needed (fresh install):
+
+```bash
+php artisan migrate:fresh
+```
+
+---
+
+## **6️⃣ Seed Super Admin User**
+
+```bash
+php artisan db:seed
+```
+
+This creates:
+
+* **Super Admin user**
+* email: `superadmin@example.com`
+* password: `password`
+  (Defined in seeder)
+
+---
+
+## **7️⃣ Run the Development Server**
+
+```bash
+php artisan serve
+```
+
+Application runs at:
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+# **👥 Role-Based Permissions**
+
+| Role       | Create URL       | View URLs         | Invite Users    |
+| ---------- | ---------------- | ----------------- | --------------- |
+| SuperAdmin | ❌                | ✔️                | ✔️ (restricted) |
+| Admin      | ❌                | ✔️ (company only) | ❌ invite Admin  |
+| Member     | ❌                | ✔️ (only own)     | ❌               |
+| Sales      | ✔️ **(Allowed)** | ✔️ (company only) | ❌               |
+| Manager    | ✔️ **(Allowed)** | ✔️ (company only) | ❌               |
+
+---
+
+# **📌 Testing the Application**
+
+## **Run All Automated Tests**
+
+```bash
+php artisan test
+```
+
+This runs feature tests verifying:
+
+* Role permissions
+* URL visibility rules
+* URL creation rules
+* Private URL resolution
+* Auth flows (register, login, logout, password reset)
+
+If all tests pass, output will show:
+
+```
+All tests passed!
+```
+
+---
+
+# **🧪 Example Test Users**
+
+After seeding, log in with:
+
+**Super Admin**
+
+```
+Email: superadmin@example.com
+Password: password
+```
+
+To test Sales role, manually update a user:
+
+```sql
+UPDATE users
+SET role='Sales', company_id=1
+WHERE email='your-email@example.com';
+```
+
+---
+
+# **🔗 Project Features**
+
+✔ Company-wise grouping
+✔ Short URL creation
+✔ Private URL resolution
+✔ Policies for authorization
+✔ Complete migrations & seeders
+✔ Breeze authentication
+✔ Full PHPUnit test coverage
+
+---
+
+# **📄 License**
+
+This project is open-source and licensed under the **MIT License**.
+
+
+
+
