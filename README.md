@@ -1,210 +1,123 @@
+📌 URL Shortener – Backend Assignment (Sembark Tech)
 
-# **URL Shortener – Backend Assignment**
+This project is a role-based URL shortener system built using Laravel 12, implementing:
 
-This project is a role-based URL Shortener system built using **Laravel 12**, **MySQL**, **Policies**, **Migrations**, **Seeders**, and **Feature Tests**.
-The application supports:
+Company-wise user & URL isolation
 
-* Company-wise user management
-* Role-based access control (SuperAdmin, Admin, Member, Sales, Manager)
-* Short URL creation restrictions based on user role
-* Private URL resolution (no public redirects)
-* User invitation logic (rules included in controllers)
-* Full automated tests for all requirements
+Role-based access control (SuperAdmin, Admin, Member, Sales, Manager)
 
----
+URL shortening with authorization policies
 
-## **🔧 Tech Stack Used**
+Invitation workflow (Admin & SuperAdmin restrictions)
 
-* **Laravel 12.x**
-* **PHP 8.2+**
-* **Composer**
-* **MySQL**
-* **Laravel Breeze (Auth UI)**
-* **PHPUnit (Feature Tests)**
+Complete test suite (Pest + PHPUnit)
 
----
-
-# **🚀 How to Set Up Project Locally**
-
-Follow these steps to run the project on your system.
-
----
-
-## **1️⃣ Clone the Repository**
-
-```bash
+🚀 How to Setup the Project Locally
+1️⃣ Clone the Repository
 git clone https://github.com/Dik-sha08/url-shortener-assignment.git
-```
-
-Go inside project folder:
-
-```bash
 cd url-shortener-assignment
-```
 
----
-
-## **2️⃣ Install Dependencies**
-
-Make sure Composer is installed.
-Then run:
-
-```bash
+2️⃣ Install Dependencies
 composer install
-```
+npm install
+npm run build
 
----
+3️⃣ Environment Setup
 
-## **3️⃣ Create Environment File**
+Copy example file:
 
-Duplicate the example env:
-
-```bash
 cp .env.example .env
-```
 
-Generate app key:
 
-```bash
-php artisan key:generate
-```
+Update .env with your MySQL credentials:
 
----
-
-## **4️⃣ Configure Database (MySQL)**
-
-Open `.env` and update these values:
-
-```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=url_shortener
 DB_USERNAME=urluser
 DB_PASSWORD=Diksha@123#
-```
 
-Ensure the database and user exist.
-(Already created during assignment.)
 
----
+Generate key:
 
-## **5️⃣ Run Migrations**
+php artisan key:generate
 
-```bash
-php artisan migrate
-```
+4️⃣ Run Migrations & Seeders
+php artisan migrate:fresh --seed
 
-If needed (fresh install):
 
-```bash
-php artisan migrate:fresh
-```
+This will create:
 
----
+Companies
 
-## **6️⃣ Seed Super Admin User**
+Users (including SuperAdmin)
 
-```bash
-php artisan db:seed
-```
+Short URLs table
 
-This creates:
+Additional relations & roles
 
-* **Super Admin user**
-* email: `superadmin@example.com`
-* password: `password`
-  (Defined in seeder)
-
----
-
-## **7️⃣ Run the Development Server**
-
-```bash
+5️⃣ Start Development Server
 php artisan serve
-```
 
-Application runs at:
 
-```
-http://127.0.0.1:8000
-```
+Visit:
 
----
+👉 http://127.0.0.1:8000
 
-# **👥 Role-Based Permissions**
+🔐 Role Access Rules
+Role	Can Create URL?	Notes
+Sales	✅ Yes	Allowed
+Manager	✅ Yes	Allowed
+Admin	❌ No	Restricted
+Member	❌ No	Restricted
+SuperAdmin	❌ No	Restricted
 
-| Role       | Create URL       | View URLs         | Invite Users    |
-| ---------- | ---------------- | ----------------- | --------------- |
-| SuperAdmin | ❌                | ✔️                | ✔️ (restricted) |
-| Admin      | ❌                | ✔️ (company only) | ❌ invite Admin  |
-| Member     | ❌                | ✔️ (only own)     | ❌               |
-| Sales      | ✔️ **(Allowed)** | ✔️ (company only) | ❌               |
-| Manager    | ✔️ **(Allowed)** | ✔️ (company only) | ❌               |
+Each role’s permissions are enforced using Laravel Policies.
 
----
+🧪 Running Tests
 
-# **📌 Testing the Application**
+To execute the full test suite:
 
-## **Run All Automated Tests**
-
-```bash
 php artisan test
-```
-
-This runs feature tests verifying:
-
-* Role permissions
-* URL visibility rules
-* URL creation rules
-* Private URL resolution
-* Auth flows (register, login, logout, password reset)
-
-If all tests pass, output will show:
-
-```
-All tests passed!
-```
-
----
-
-# **🧪 Example Test Users**
-
-After seeding, log in with:
-
-**Super Admin**
-
-```
-Email: superadmin@example.com
-Password: password
-```
-
-To test Sales role, manually update a user:
-
-```sql
-UPDATE users
-SET role='Sales', company_id=1
-WHERE email='your-email@example.com';
-```
-
----
-
-# **🔗 Project Features**
-
-✔ Company-wise grouping
-✔ Short URL creation
-✔ Private URL resolution
-✔ Policies for authorization
-✔ Complete migrations & seeders
-✔ Breeze authentication
-✔ Full PHPUnit test coverage
-
----
-
-# **📄 License**
-
-This project is open-source and licensed under the **MIT License**.
 
 
+Includes:
 
+Authentication tests
 
+Profile tests
+
+URL access & visibility tests
+
+Role-based authorization tests
+
+📦 Project Structure (Summary)
+app/
+ ├── Models/
+ ├── Policies/
+ ├── Http/
+ │    ├── Controllers/
+ │    ├── Middleware/
+database/
+ ├── migrations/
+ ├── seeders/
+resources/
+ ├── views/
+tests/
+ ├── Feature/
+ ├── Unit/
+
+🤖 AI Usage Declaration (As Required by Assignment)
+
+I used AI tools only for assistance, not for generating the full assignment.
+My usage includes:
+
+ChatGPT: Helped me understand Laravel policies, model relationships, and testing concepts.
+
+ChatGPT: Assisted in debugging specific errors (policy binding, factories, controller fixes).
+
+Cursor / ChatGPT: Used occasionally for syntax lookup (e.g., validation, migrations).
+
+All implementation decisions, coding, testing, debugging strategy, and final logic are my own work.
+AI was used only for learning, verification, and error guidance as allowed in the assignment.
